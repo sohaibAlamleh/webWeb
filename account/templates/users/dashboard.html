@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
+    <style>
+        body {
+            background-color: #F7EDE2;
+            margin: 0;
+        }
+
+        #main1 {
+            color: #5F3A42;
+            text-align: center;
+            padding: 0.5rem;
+        }
+
+        nav div {
+            position: absolute;
+            right: 5rem;
+            display: flex;
+            flex-direction: row;
+            gap: 2rem;
+        }
+
+        nav div h5 {
+            padding: 0.3rem;
+            margin: 0.4rem 0 0;
+            font-size: 1.25rem;
+            background-color: #e7ad95;
+            border-radius: 0.3rem;
+        }
+
+        nav div a {
+            text-decoration: none;
+            color: #f5e6d6;
+        }
+
+        #horizontal {
+            width: 100%;
+            gap: 1rem;
+            position: absolute;
+            left: 5rem;
+        }
+
+        #data {
+            margin-bottom: -1rem;
+            border-bottom: black 0.1rem solid;
+        }
+
+        nav {
+            width: 100%;
+            height: 3rem;
+            background-color: #f5e6d6;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        nav h4 {
+            margin: 0;
+            font-size: 2rem;
+            color: #b45b33;
+            position: relative;
+            left: 5rem;
+        }
+
+        #theChart {
+            position: absolute;
+            top: -10%;
+            left: 30%;
+            width: 50%;
+
+
+        }
+
+        td {
+            text-align: center;
+            margin: 5px;
+        }
+
+        table {
+            background-color: #e7ad95;
+            border: black;
+            border-radius: 0.3rem;
+            color: #5F3A42;
+        }
+
+    </style>
+
+</head>
+<body>
+
+{% extends 'base.html' %}
+{# {% load static %}#}
+
+{#    <link rel="stylesheet" href="{% static "img.css" %}">#}
+
+
+
+
+{% block content %}
+
+    <div id="theChart" style="width:500px; position: absolute;left: 300px;top: 200px ">
+        <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+    Hello, {{ user.username|default:'Guest' }}!
+    <div style="border:1px solid black;width: 200px">
+        {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}">Logout</a>
+        <a href="{% url 'password_change' %}">Change password</a>
+       {% endif %}
+    </div>
+
+    {% if user.is_authenticated %}
+        <div id="horizontal">
+        <form action="" method="get">
+            <select id="data" name="filter">
+                <option value="id">ID</option>
+                <option value="name">Name</option>
+                <option value="numOfCourses">Number of Courses</option>
+            </select>
+
+            <input type="search" id="searchVal" name="searchVal">
+            <input type="submit" id="sBtn">
+        </form>
+
+
+
+
+
+        <div style="border: 1px solid black;width: 200px;float: bottom">
+
+
+            <table>
+                <tr>
+                    <th>ID</th>&nbsp;
+                    <th>Name</th>&nbsp;
+                    <th>Number of Courser</th>
+                </tr>
+
+
+                {% for record in names %}
+                    <tr>
+                        <td>{{ record.ID }}</td>&nbsp;
+                        <td>{{ record.NAME }}</td>&nbsp;
+                        <td>{{ record.NumberOfCourses }}</td>
+                    </tr>
+                {% endfor %}
+
+
+            </table>
+
+
+        </div>
+
+        <script>
+            var data_list = []
+            var name_list = []
+            {% for record in names %}
+
+                name_list.push("{{ record.NAME }}")
+            {% endfor %}
+            {% for record in names %}
+                data_list.push({{ record.NumberOfCourses }})
+            {% endfor %}
+            var ctx = document.getElementById('myChart').getContext('2d');
+            console.log({{ NumberOfCourses }});
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: name_list,
+                    datasets: [{
+                        label: '# of Votes',
+                        data: data_list,
+
+
+                        backgroundColor
+            :
+            [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+                borderColor
+            :
+            [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+                borderWidth
+            :
+            1
+            }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+            })
+            ;
+        </script>
+
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+</div>
+
+    {{ NumberOfCourses }}
+
+
+    <div style="float: right;float: top;width: 50%;border: 1px black">
+        <form action="dashboard.html" method="get">
+            <input type="text" name="goo">
+        </form>
+
+        <script async src="https://cse.google.com/cse.js?cx=c673cbd77440b42ba"></script>
+        <div class="gcse-searchresults-only"></div>
+
+    </div>
+    <div>
+    <form action="dashboard.html" method="get">
+        <input type="search" name="q" id="You_ser" placeholder="serach on youtube">
+        <input type="submit" value="search">
+
+
+    </form>
+
+    </div>
+
+    <div style="height: 100px"></div><!--for space-->
+
+    <div style="width: 800px;border: 1px solid lightcoral;height: 600px "  id="all video" >
+     
+      {% for vid in video %}
+        
+          <div id="video">
+              <a href="https://www.youtube.com/watch?v={{ vid.id }}">
+                  <h1>{{ vid.title }}</h1>
+                   <img src="{{ vid.thumbnail }}" alt="">
+              </a>
+   
+
+        <p>{{ vid.description }}</p>
+
+
+        </div>
+      {% endfor %}
+
+    </div>
+
+
+{% endblock %}
+</body>
+</html>
